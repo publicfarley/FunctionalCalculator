@@ -1,6 +1,6 @@
 //
 //  CalculatorModel.swift
-//  StackViewCodeDemo
+//  FunctionalCalculator
 //
 //  Created by Farley Caesar on 2016-02-03.
 //  Copyright © 2016 AppObject. All rights reserved.
