@@ -9,20 +9,22 @@
 import Foundation
 
 struct ReadyToEnterFirstNumberState: CalculatorState {
-    let display: String
+    let displayValue: Int
     
-    func handleNumberEvent(number: String) -> CalculatorState {
+    func handleNumberEntryEvent(numberAsString: String) throws -> CalculatorState {
+    
+        let number = try toInt(numberAsString)
         
-        guard !(display == "0" && number == "0") else {
+        guard !(displayValue == 0 && number == 0) else {
             return self
         }
         
-        return EnteringFirstNumberState(display: number)
+        return EnteringFirstNumberState(displayValue: number)
     }
     
 }
 
-let initialCalculatorState = ReadyToEnterFirstNumberState(display: "0")
+let initialCalculatorState = ReadyToEnterFirstNumberState(displayValue: 0)
 
 extension CalculatorState {
 
