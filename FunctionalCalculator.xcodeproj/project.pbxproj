@@ -8,9 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		B45259731C93251000C57206 /* CalculatorState.swift in Sources */ = {isa = PBXBuildFile; fileRef = B45259721C93251000C57206 /* CalculatorState.swift */; };
-		B45259771C9325DF00C57206 /* ReadyToEnterFirstNumberState.swift in Sources */ = {isa = PBXBuildFile; fileRef = B45259761C9325DF00C57206 /* ReadyToEnterFirstNumberState.swift */; };
 		B45259791C93261000C57206 /* EnteringFirstNumberState.swift in Sources */ = {isa = PBXBuildFile; fileRef = B45259781C93261000C57206 /* EnteringFirstNumberState.swift */; };
-		B452597B1C93262C00C57206 /* ReadyToEnterSecondNumberState.swift in Sources */ = {isa = PBXBuildFile; fileRef = B452597A1C93262C00C57206 /* ReadyToEnterSecondNumberState.swift */; };
 		B452597D1C9326DD00C57206 /* EnteringSecondNumberState.swift in Sources */ = {isa = PBXBuildFile; fileRef = B452597C1C9326DD00C57206 /* EnteringSecondNumberState.swift */; };
 		B452597F1C9326FA00C57206 /* EvaluatedState.swift in Sources */ = {isa = PBXBuildFile; fileRef = B452597E1C9326FA00C57206 /* EvaluatedState.swift */; };
 		B48EE9CB1C6D120600664C30 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B48EE9CA1C6D120600664C30 /* AppDelegate.swift */; };
@@ -23,9 +21,7 @@
 
 /* Begin PBXFileReference section */
 		B45259721C93251000C57206 /* CalculatorState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalculatorState.swift; sourceTree = "<group>"; };
-		B45259761C9325DF00C57206 /* ReadyToEnterFirstNumberState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadyToEnterFirstNumberState.swift; sourceTree = "<group>"; };
 		B45259781C93261000C57206 /* EnteringFirstNumberState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnteringFirstNumberState.swift; sourceTree = "<group>"; };
-		B452597A1C93262C00C57206 /* ReadyToEnterSecondNumberState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadyToEnterSecondNumberState.swift; sourceTree = "<group>"; };
 		B452597C1C9326DD00C57206 /* EnteringSecondNumberState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnteringSecondNumberState.swift; sourceTree = "<group>"; };
 		B452597E1C9326FA00C57206 /* EvaluatedState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EvaluatedState.swift; sourceTree = "<group>"; };
 		B48EE9C71C6D120600664C30 /* FunctionalCalculator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FunctionalCalculator.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -53,9 +49,7 @@
 			isa = PBXGroup;
 			children = (
 				B45259721C93251000C57206 /* CalculatorState.swift */,
-				B45259761C9325DF00C57206 /* ReadyToEnterFirstNumberState.swift */,
 				B45259781C93261000C57206 /* EnteringFirstNumberState.swift */,
-				B452597A1C93262C00C57206 /* ReadyToEnterSecondNumberState.swift */,
 				B452597C1C9326DD00C57206 /* EnteringSecondNumberState.swift */,
 				B452597E1C9326FA00C57206 /* EvaluatedState.swift */,
 			);
@@ -168,8 +162,6 @@
 				B452597F1C9326FA00C57206 /* EvaluatedState.swift in Sources */,
 				B45259791C93261000C57206 /* EnteringFirstNumberState.swift in Sources */,
 				B452597D1C9326DD00C57206 /* EnteringSecondNumberState.swift in Sources */,
-				B452597B1C93262C00C57206 /* ReadyToEnterSecondNumberState.swift in Sources */,
-				B45259771C9325DF00C57206 /* ReadyToEnterFirstNumberState.swift in Sources */,
 				B48EE9E11C6D129300664C30 /* CalculatorViewController.swift in Sources */,
 				B45259731C93251000C57206 /* CalculatorState.swift in Sources */,
 				B48EE9CB1C6D120600664C30 /* AppDelegate.swift in Sources */,
