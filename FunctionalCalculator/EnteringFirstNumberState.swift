@@ -9,32 +9,38 @@
 import Foundation
 
 struct EnteringFirstNumberState: CalculatorState {
-    let display: String
+    let displayValue: Int
+
+    func handleNumberEntryEvent(numberAsString: String) throws -> CalculatorState {
     
-    func handleNumberEvent(number: String) -> CalculatorState {
-        guard !(display == "0" && number == "0") else {
+        let enteredNumber = try toInt(numberAsString)
+
+        guard !(displayValue == 0 && enteredNumber == 0) else {
             return self
         }
         
-        return EnteringFirstNumberState(display: display + number)
+        let numberToDisplay = try toInt(String(displayValue) + numberAsString)
+        
+        return EnteringFirstNumberState(displayValue: numberToDisplay)
     }
     
-    func handleBinaryOperationEvent(binaryIntOperation: BinaryIntOperation) -> CalculatorState {
-        let capturedFirstNumber = calculatorDisplayTextAsInt(display)
+    func handleBinaryOperationEvent(operationName: String) throws -> CalculatorState {
         
+        let binaryOperation = try binaryIntOperationFor(operationName)
+
         return ReadyToEnterSecondNumberState(
-            firstNumber: capturedFirstNumber,
-            binaryIntOperation: binaryIntOperation,
-            display: display)
+            firstNumber: displayValue,
+            binaryIntOperation: binaryOperation,
+            displayValue: displayValue)
     }
     
-    func handleUnaryOperationEvent(unaryOperation: UnaryIntOperation) -> CalculatorState {
+    func handleUnaryOperationEvent(operationName: String) throws -> CalculatorState {
         
-        let displayedNumberAsInt = calculatorDisplayTextAsInt(display)
+        let unaryOperation = try unaryIntOperationFor(operationName)
         
-        let unaryOperationResult = String(unaryOperation(displayedNumberAsInt))
+        let unaryOperationResult = unaryOperation(displayValue)
         
-        return EnteringFirstNumberState(display: unaryOperationResult)
+        return EnteringFirstNumberState(displayValue: unaryOperationResult)
     }
     
     func handleClearEvent() -> CalculatorState {
