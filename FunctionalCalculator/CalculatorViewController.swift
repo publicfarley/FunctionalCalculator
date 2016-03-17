@@ -12,42 +12,42 @@ import UIKit
 
 class CalculatorViewController: UIViewController {
     
-    // MARK: Constants
-    let binaryOperationsMap = ["+": add,"-": subtract,"*": multiply,"/": divide]
-    let unaryOperationsMap = ["+/-": plusMinus]
-    
-
     
     // MARK: Properties
-    var currentCalculatorState: CalculatorState = initialCalculatorState
+    var currentCalculatorState: CalculatorState = initialCalculatorState {
+        didSet {
+            render(currentCalculatorState)
+        }
+    }
     
     // MARK: Outlets
-    @IBOutlet weak var calculatorDisplay: UILabel!
-    
-    
-    // MARK: ViewController Lifecycle methods
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        configureCalculatorDisplay()
-
-        render(currentCalculatorState)
+    @IBOutlet weak var calculatorDisplay: UILabel! {
+        didSet {
+            configureCalculatorDisplay()
+        }
     }
     
     
     // MARK: Event handling methods
     @IBAction func numberButtonPressed(sender: UIButton) {
         
-        guard let number = sender.titleForState(.Normal) else {
+        guard let enteredNumber = sender.titleForState(.Normal) else {
             NSLog("Title not set")
             return
         }
         
-        let newCalculatorState = currentCalculatorState.handleNumberEvent(number)
+        do {
+            let newCalculatorState = try currentCalculatorState.handleNumberEntryEvent(enteredNumber)
 
-        render(newCalculatorState)
+            currentCalculatorState =  newCalculatorState
+        }
+        catch CalculatorStateError.NumberConversionError(let unconvertibleValue) {
+            presentErrorAlert("Supplied number button '\(unconvertibleValue)' could not be converted to an integer value.")
+        }
+        catch {
+            presentErrorAlert("Supplied number button '\(enteredNumber)' caused unexpected exception.")
+        }
 
-        currentCalculatorState =  newCalculatorState
     }
     
     
@@ -59,16 +59,20 @@ class CalculatorViewController: UIViewController {
             return
         }
         
-        guard let binaryOperation = binaryOperationsMap[buttonTitle] else {
-            NSLog("Binary Operation '\(buttonTitle)' not supported.")
-            return
+        
+        do {
+            let newCalculatorState =  try currentCalculatorState.handleBinaryOperationEvent(buttonTitle)
+
+            currentCalculatorState =  newCalculatorState
         }
+        catch CalculatorStateError.OperationNotSupported(let unsupportedOperation) {
+            presentErrorAlert("Supplied operation '\(unsupportedOperation)' is an unsupported operation.")
+        }
+        catch {
+            presentErrorAlert("Supplied operation '\(buttonTitle)' caused unexpected exception.")
+        }
+
         
-        let newCalculatorState =  currentCalculatorState.handleBinaryOperationEvent(binaryOperation)
-        
-        render(newCalculatorState)
-        
-        currentCalculatorState =  newCalculatorState
     }
     
     
@@ -80,17 +84,17 @@ class CalculatorViewController: UIViewController {
             return
         }
         
-        guard let unaryOperation = unaryOperationsMap[buttonTitle] else {
-            NSLog("Unary Operation '\(buttonTitle)' does not exist.")
-            return
+        do {
+            let newCalculatorState =  try currentCalculatorState.handleUnaryOperationEvent(buttonTitle)
+            
+            currentCalculatorState =  newCalculatorState
         }
-        
-
-        let newCalculatorState =  currentCalculatorState.handleUnaryOperationEvent(unaryOperation)
-        
-        render(newCalculatorState)
-        
-        currentCalculatorState =  newCalculatorState
+        catch CalculatorStateError.OperationNotSupported(let unsupportedOperation) {
+            presentErrorAlert("Supplied operation '\(unsupportedOperation)' is an unsupported operation.")
+        }
+        catch {
+            presentErrorAlert("Supplied operation '\(buttonTitle)' caused unexpected exception.")
+        }
 
     }
     
@@ -101,8 +105,6 @@ class CalculatorViewController: UIViewController {
         
         let newCalculatorState = currentCalculatorState.handleEvaluateEvent()
         
-        render(newCalculatorState)
-        
         currentCalculatorState =  newCalculatorState
         
     }
@@ -110,8 +112,6 @@ class CalculatorViewController: UIViewController {
     
     @IBAction func clearButtonPressed(sender: UIButton) {
         let newCalculatorState =  currentCalculatorState.handleClearEvent()
-        
-        render(newCalculatorState)
         
         currentCalculatorState =  newCalculatorState
         
@@ -122,22 +122,24 @@ class CalculatorViewController: UIViewController {
     @IBAction func allClearButtonPressed(sender: UIButton) {
         let newCalculatorState = currentCalculatorState.handleAllClearEvent()
         
-        render(newCalculatorState)
-        
         currentCalculatorState = newCalculatorState
     }
     
     
     // MARK: Private helper methods
     private func render(calculatorState: CalculatorState) {
-        calculatorDisplay.text = calculatorState.display
+        calculatorDisplay.text = calculatorState.displayValueAsString
     }
     
     
-    private func calculatorDisplayTextAsInt(displayText: String?) -> Int {
-        return Int(displayText ?? "0") ?? 0
+    private func presentErrorAlert(message: String) {
+        let alertController = UIAlertController(title:"Error", message: message, preferredStyle: .Alert)
+        
+        let okButton = UIAlertAction(title: "OK", style: .Default, handler: nil)
+        alertController.addAction(okButton)
+        
+        presentViewController(alertController, animated: true, completion: nil)
     }
-    
     
     private func configureCalculatorDisplay() {
         calculatorDisplay.layer.borderWidth = 0.5
