@@ -48,3 +48,13 @@ struct EnteringFirstNumberState: CalculatorState {
     }
     
 }
+
+let initialCalculatorState = EnteringFirstNumberState(displayValue: 0)
+
+extension CalculatorState {
+    
+    func handleAllClearEvent() -> CalculatorState {
+        return initialCalculatorState
+    }
+    
+}
