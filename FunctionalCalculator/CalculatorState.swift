@@ -8,30 +8,45 @@
 
 import Foundation
 
+
+
+
 protocol CalculatorState {
-    var display: String {get}
+
+    var displayValue: Int {get}
+    var displayValueAsString: String {get}
     
-    func handleNumberEvent(number: String) -> CalculatorState
-    func handleBinaryOperationEvent(binaryOperation: BinaryIntOperation) -> CalculatorState
-    func handleUnaryOperationEvent(unaryOperation: UnaryIntOperation) -> CalculatorState
+    func handleNumberEntryEvent(numberAsString: String) throws -> CalculatorState
+    func handleBinaryOperationEvent(operationName: String) throws -> CalculatorState
+    func handleUnaryOperationEvent(operationName: String) throws -> CalculatorState
     func handleEvaluateEvent() -> CalculatorState
     func handleClearEvent() -> CalculatorState
     func handleAllClearEvent() -> CalculatorState
+    
+}
+
+enum CalculatorStateError: ErrorType {
+    case NumberConversionError(unconvertibleValue: String)
+    case OperationNotSupported(unsupportedOperation: String)
 }
 
 
-
+// MARK: CalculatorState Default Function Implementations
 extension CalculatorState {
     
-    func handleNumberEvent(number: String) -> CalculatorState {
+    var displayValueAsString: String {
+        return String(displayValue)
+    }
+    
+    func handleNumberEntryEvent(numberAsString: String) -> CalculatorState {
         return self
     }
     
-    func handleBinaryOperationEvent(binaryOperation: BinaryIntOperation) -> CalculatorState {
+    func handleBinaryOperationEvent(operationName: String) -> CalculatorState {
         return self
     }
     
-    func handleUnaryOperationEvent(unaryOperation: UnaryIntOperation) -> CalculatorState {
+    func handleUnaryOperationEvent(operationName: String) -> CalculatorState {
         return self
     }
     
@@ -42,10 +57,49 @@ extension CalculatorState {
     func handleClearEvent() -> CalculatorState {
         return self
     }
+}
+
+
+// MARK: CalculatorState Utility Functions
+extension CalculatorState {
+
+    var binaryOperationsMap: [String: BinaryIntOperation] {
+        return ["+": add,"-": subtract,"*": multiply,"/": divide]
+    }
+    
+    var unaryOperationsMap: [String: UnaryIntOperation] {
+        return ["+/-": plusMinus]
+    }
+    
+    
+    func binaryIntOperationFor(operationName: String) throws -> BinaryIntOperation {
+
+        guard let binaryOperation = binaryOperationsMap[operationName] else {
+            throw CalculatorStateError.OperationNotSupported(unsupportedOperation: operationName)
+        }
         
-    // Mark: Utility functions
-    func calculatorDisplayTextAsInt(displayText: String) -> Int {
-        return Int(displayText) ?? 0
+        return binaryOperation
+    }
+    
+
+    func unaryIntOperationFor(operationName: String) throws -> UnaryIntOperation {
+        guard let unaryOperation = unaryOperationsMap[operationName] else {
+            throw CalculatorStateError.OperationNotSupported(unsupportedOperation: operationName)
+        }
+        
+        return unaryOperation
+    }
+    
+    func toInt(stringValue: String) throws -> Int {
+        
+        guard let integerRepresentation = Int(stringValue) else {
+            throw CalculatorStateError.NumberConversionError(unconvertibleValue: stringValue)
+        }
+        
+        return integerRepresentation
     }
     
 }
+
+
+
