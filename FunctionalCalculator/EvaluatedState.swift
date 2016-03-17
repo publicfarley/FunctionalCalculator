@@ -8,28 +8,34 @@
 
 import Foundation
 
-struct EvaluatedState: CalculatorState {
-    let display: String
-    
-    func handleNumberEvent(number: String) -> CalculatorState {
-        return EnteringFirstNumberState(display: number)
-    }
-    
-    func handleUnaryOperationEvent(unaryOperation: UnaryIntOperation) -> CalculatorState {
-        let displayedNumberAsInt = calculatorDisplayTextAsInt(display)
+ struct EvaluatedState: CalculatorState {
+     let displayValue: Int
+
+     func handleNumberEntryEvent(numberAsString: String) throws -> CalculatorState {
+     
+         let number = try toInt(numberAsString)
+         
+         return EnteringFirstNumberState(displayValue: number)
+     }
+     
+    func handleBinaryOperationEvent(operationName: String) throws -> CalculatorState {
         
-        let unaryOperationResult = String(unaryOperation(displayedNumberAsInt))
-        
-        return EnteringFirstNumberState(display: unaryOperationResult)
-    }
-    
-    func handleBinaryOperationEvent(binaryOperation: BinaryIntOperation) -> CalculatorState {
-        
-        let displayedNumberAsInt = calculatorDisplayTextAsInt(display)
+        let binaryOperation = try binaryIntOperationFor(operationName)
         
         return ReadyToEnterSecondNumberState(
-            firstNumber: displayedNumberAsInt,
+            firstNumber: displayValue,
             binaryIntOperation: binaryOperation,
-            display: display)
+            displayValue: displayValue)
     }
-}
+
+     func handleUnaryOperationEvent(operationName: String) throws -> CalculatorState {
+         
+        let unaryOperation = try unaryIntOperationFor(operationName)
+        
+        let unaryOperationResult = unaryOperation(displayValue)
+        
+        return EnteringFirstNumberState(displayValue: unaryOperationResult)
+     }
+     
+
+ }
