@@ -6,59 +6,74 @@
 //  Copyright © 2016 AppObject. All rights reserved.
 //
 
-import Foundation
+ import Foundation
+ 
+ struct EnteringSecondNumberState: CalculatorState {
+     let firstNumber: Int
+     let binaryIntOperation: BinaryIntOperation
+     let displayValue: Int
+     
+     func handleNumberEntryEvent(numberAsString: String) throws -> CalculatorState {
+     
+         let number = try toInt(numberAsString)
+         
+         guard !(displayValue == 0 && number == 0) else {
+             return self
+         }
+         
+         let newDisplayValue = try toInt(String(displayValue)+numberAsString)
+         
+         return EnteringSecondNumberState(
+             firstNumber: firstNumber,
+             binaryIntOperation: binaryIntOperation,
+             displayValue: newDisplayValue)
+     }
+     
+    
+     func handleBinaryOperationEvent(operationName: String) throws -> CalculatorState {
 
-struct EnteringSecondNumberState: CalculatorState {
-    let firstNumber: Int
-    let binaryIntOperation: BinaryIntOperation
-    let display: String
+        let binaryOperation = try binaryIntOperationFor(operationName)
+
+        let evaluation = binaryOperation(firstNumber,displayValue)
+         
+         return EvaluatedState(displayValue: evaluation)
+         
+     }
+     
     
-    func handleNumberEvent(number: String) -> CalculatorState {
-        guard !(display == "0" && number == "0") else {
-            return self
-        }
+     func handleUnaryOperationEvent(operationName: String) throws -> CalculatorState {
+         // let displayedNumberAsInt = calculatorDisplayTextAsInt(display)
+         
+         //let unaryOperationResult = String(unaryOperation(displayedNumberAsInt))
+        let unaryOperation = try unaryIntOperationFor(operationName)
         
-        return EnteringSecondNumberState(
-            firstNumber: firstNumber,
-            binaryIntOperation: binaryIntOperation,
-            display: display + number)
-    }
+        let unaryOperationResult = unaryOperation(displayValue)
+        
+         return EnteringSecondNumberState(
+             firstNumber: firstNumber,
+             binaryIntOperation: binaryIntOperation,
+             displayValue: unaryOperationResult)
+     }
     
-    func handleBinaryOperationEvent(binaryOperation: BinaryIntOperation) -> CalculatorState {
-        
-        let secondNumber = calculatorDisplayTextAsInt(display)
-        let evaluation = binaryOperation(firstNumber,secondNumber)
-        
-        return EvaluatedState(display: String(evaluation))
-        
-    }
     
-    func handleUnaryOperationEvent(unaryOperation: UnaryIntOperation) -> CalculatorState {
-        let displayedNumberAsInt = calculatorDisplayTextAsInt(display)
-        
-        let unaryOperationResult = String(unaryOperation(displayedNumberAsInt))
-        
-        return EnteringSecondNumberState(
-            firstNumber: firstNumber,
-            binaryIntOperation: binaryIntOperation,
-            display: unaryOperationResult)
-    }
     
-    func handleEvaluateEvent() -> CalculatorState {
-        
-        let secondNumberAsInt = calculatorDisplayTextAsInt(display)
-        let evaluation = binaryIntOperation(firstNumber,secondNumberAsInt)
-        
-        return EvaluatedState(display: String(evaluation))
-    }
+     
+     func handleEvaluateEvent() -> CalculatorState {
+         
+         let evaluation = binaryIntOperation(firstNumber,displayValue)
+         
+         return EvaluatedState(displayValue: evaluation)
+     }
+     
+
     
     func handleClearEvent() -> CalculatorState {
-        
-        return ReadyToEnterSecondNumberState(
-            firstNumber: firstNumber,
-            binaryIntOperation: binaryIntOperation,
-            display: "0")
-        
-    }
-    
-}
+         
+         return ReadyToEnterSecondNumberState(
+             firstNumber: firstNumber,
+             binaryIntOperation: binaryIntOperation,
+             displayValue: 0)
+         
+     }
+     
+ }
