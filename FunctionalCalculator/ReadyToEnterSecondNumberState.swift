@@ -32,9 +32,11 @@ struct ReadyToEnterSecondNumberState: CalculatorState {
     
     func handleBinaryOperationEvent(operationName: String) throws -> CalculatorState {
         
+        let operation = try binaryIntOperationFor(operationName)
+        
         return ReadyToEnterSecondNumberState(
             firstNumber: firstNumber,
-            binaryIntOperation: binaryIntOperation,
+            binaryIntOperation: operation,
             displayValue: displayValue)
     }
     
