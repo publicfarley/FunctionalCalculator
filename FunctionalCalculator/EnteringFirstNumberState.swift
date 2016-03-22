@@ -9,39 +9,47 @@
 import Foundation
 
 struct EnteringFirstNumberState: CalculatorState {
-    let displayValue: Int
+    let displayValue: String
 
     func handleNumberEntryEvent(numberAsString: String) throws -> CalculatorState {
     
         let enteredNumber = try toInt(numberAsString)
 
-        guard !(displayValue == 0 && enteredNumber == 0) else {
+        guard !(displayValue == "0" && enteredNumber == 0) else {
             return self
         }
         
-        let numberToDisplay = try toInt(String(displayValue) + numberAsString)
+        let numberToDisplay = (displayValue == "0") ? numberAsString : (displayValue + numberAsString)
         
         return EnteringFirstNumberState(displayValue: numberToDisplay)
     }
+    
     
     func handleBinaryOperationEvent(operationName: String) throws -> CalculatorState {
         
         let binaryOperation = try binaryIntOperationFor(operationName)
 
+        let firstNumber = try toInt(displayValue)
+        
         return ReadyToEnterSecondNumberState(
-            firstNumber: displayValue,
+            firstNumber: firstNumber,
             binaryIntOperation: binaryOperation,
             displayValue: displayValue)
+ 
     }
+    
     
     func handleUnaryOperationEvent(operationName: String) throws -> CalculatorState {
         
         let unaryOperation = try unaryIntOperationFor(operationName)
         
-        let unaryOperationResult = unaryOperation(displayValue)
+        let currentValue = try toInt(displayValue)
+        
+        let unaryOperationResult = String(unaryOperation(currentValue))
         
         return EnteringFirstNumberState(displayValue: unaryOperationResult)
     }
+    
     
     func handleClearEvent() -> CalculatorState {
         return initialCalculatorState
@@ -49,12 +57,3 @@ struct EnteringFirstNumberState: CalculatorState {
     
 }
 
-let initialCalculatorState = EnteringFirstNumberState(displayValue: 0)
-
-extension CalculatorState {
-    
-    func handleAllClearEvent() -> CalculatorState {
-        return initialCalculatorState
-    }
-    
-}
