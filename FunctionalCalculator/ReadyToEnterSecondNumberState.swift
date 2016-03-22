@@ -3,7 +3,7 @@
 //  FunctionalCalculator
 //
 //  Created by Farley Caesar on 2016-03-17.
-//  Copyright © 2016 AppObject. All rights reserved.
+//  Copyright © 2016 Manning Publications Co. All rights reserved.
 //
 
 import Foundation
