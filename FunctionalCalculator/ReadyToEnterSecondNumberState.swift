@@ -11,22 +11,23 @@ import Foundation
 struct ReadyToEnterSecondNumberState: CalculatorState {
     let firstNumber: Int
     let binaryIntOperation: BinaryIntOperation
-    let displayValue: Int
+    let displayValue: String
     
     
     
     func handleNumberEntryEvent(numberAsString: String) throws -> CalculatorState {
         
-        let number = try toInt(numberAsString)
+        let secondNumber = try toInt(numberAsString)
         
-        guard !(displayValue == 0 && number == 0) else {
+        guard !(displayValue == "0" && secondNumber == 0) else {
             return self
         }
         
         return EnteringSecondNumberState(
             firstNumber: firstNumber,
+            secondNumber: secondNumber,
             binaryIntOperation: binaryIntOperation,
-            displayValue: number)
+            displayValue: numberAsString)
     }
     
     
@@ -45,12 +46,12 @@ struct ReadyToEnterSecondNumberState: CalculatorState {
         
         let unaryOperation = try unaryIntOperationFor(operationName)
         
-        let unaryOperationResult = unaryOperation(displayValue)
+        let unaryOperationResult = unaryOperation(firstNumber)
         
-        return EnteringSecondNumberState(
-            firstNumber: firstNumber,
+        return ReadyToEnterSecondNumberState(
+            firstNumber: unaryOperationResult,
             binaryIntOperation: binaryIntOperation,
-            displayValue: unaryOperationResult)
+            displayValue:  String(unaryOperationResult))
         
     }
     
