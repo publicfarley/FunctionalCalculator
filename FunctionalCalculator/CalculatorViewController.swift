@@ -20,10 +20,18 @@ class CalculatorViewController: UIViewController {
         }
     }
     
+    private func render(calculatorState: CalculatorState) {
+        calculatorDisplay.text = calculatorState.displayValue
+    }
+    
+    
     // MARK: Outlets
     @IBOutlet weak var calculatorDisplay: UILabel! {
         didSet {
-            configureCalculatorDisplay()
+            calculatorDisplay.layer.borderWidth = 0.5
+            
+            calculatorDisplay.layer.borderColor =
+                UIColor.darkGrayColor().CGColor
         }
     }
     
@@ -37,17 +45,25 @@ class CalculatorViewController: UIViewController {
         }
         
         do {
-            let newCalculatorState = try currentCalculatorState.handleNumberEntryEvent(enteredNumber)
-
+            let newCalculatorState =
+            try currentCalculatorState.handleNumberEntryEvent(enteredNumber)
+            
             currentCalculatorState =  newCalculatorState
         }
-        catch CalculatorStateError.NumberConversionError(let unconvertibleValue) {
-            presentErrorAlert("Supplied number button '\(unconvertibleValue)' could not be converted to an integer value.")
+        catch CalculatorStateError.NumberConversionError(
+            let unconvertibleValue) {
+                
+                presentErrorAlert(
+                    "Number button '\(unconvertibleValue)' could not be converted to an integer.")
+                
         }
         catch {
-            presentErrorAlert("Supplied number button '\(enteredNumber)' caused unexpected exception.")
+            
+            presentErrorAlert(
+                "Number button '\(enteredNumber)' caused unexpected exception.")
+            
         }
-
+        
     }
     
     
@@ -61,17 +77,20 @@ class CalculatorViewController: UIViewController {
         
         
         do {
-            let newCalculatorState =  try currentCalculatorState.handleBinaryOperationEvent(buttonTitle)
-
+            let newCalculatorState =
+            try currentCalculatorState.handleBinaryOperationEvent(buttonTitle)
+            
             currentCalculatorState =  newCalculatorState
         }
-        catch CalculatorStateError.OperationNotSupported(let unsupportedOperation) {
-            presentErrorAlert("Supplied operation '\(unsupportedOperation)' is an unsupported operation.")
+        catch CalculatorStateError.OperationNotSupported(let operation) {
+            presentErrorAlert(
+                "Operation '\(operation)' is not supported.")
         }
         catch {
-            presentErrorAlert("Supplied operation '\(buttonTitle)' caused unexpected exception.")
+            presentErrorAlert(
+                "Operation '\(buttonTitle)' caused an unexpected exception.")
         }
-
+        
         
     }
     
@@ -85,17 +104,19 @@ class CalculatorViewController: UIViewController {
         }
         
         do {
-            let newCalculatorState =  try currentCalculatorState.handleUnaryOperationEvent(buttonTitle)
+            let newCalculatorState =
+            try currentCalculatorState.handleUnaryOperationEvent(buttonTitle)
             
             currentCalculatorState =  newCalculatorState
         }
-        catch CalculatorStateError.OperationNotSupported(let unsupportedOperation) {
-            presentErrorAlert("Supplied operation '\(unsupportedOperation)' is an unsupported operation.")
+        catch CalculatorStateError.OperationNotSupported(let operation) {
+            presentErrorAlert(
+                "Operation '\(operation)' is not supported.")
         }
         catch {
-            presentErrorAlert("Supplied operation '\(buttonTitle)' caused unexpected exception.")
+            presentErrorAlert(
+                "Operation '\(buttonTitle)' caused an unexpected exception.")
         }
-
     }
     
     
@@ -106,7 +127,6 @@ class CalculatorViewController: UIViewController {
         let newCalculatorState = currentCalculatorState.handleEvaluateEvent()
         
         currentCalculatorState =  newCalculatorState
-        
     }
     
     
@@ -114,7 +134,6 @@ class CalculatorViewController: UIViewController {
         let newCalculatorState =  currentCalculatorState.handleClearEvent()
         
         currentCalculatorState =  newCalculatorState
-        
     }
     
     
@@ -127,23 +146,22 @@ class CalculatorViewController: UIViewController {
     
     
     // MARK: Private helper methods
-    private func render(calculatorState: CalculatorState) {
-        calculatorDisplay.text = calculatorState.displayValueAsString
-    }
-    
-    
     private func presentErrorAlert(message: String) {
-        let alertController = UIAlertController(title:"Error", message: message, preferredStyle: .Alert)
+        let alertController =
+        UIAlertController(title:"Error",
+            message: message,
+            preferredStyle: .Alert)
         
-        let okButton = UIAlertAction(title: "OK", style: .Default, handler: nil)
+        let okButton =
+        UIAlertAction(title: "OK",
+            style: .Default,
+            handler: nil)
+        
         alertController.addAction(okButton)
         
-        presentViewController(alertController, animated: true, completion: nil)
-    }
-    
-    private func configureCalculatorDisplay() {
-        calculatorDisplay.layer.borderWidth = 0.5
-        calculatorDisplay.layer.borderColor = UIColor.darkGrayColor().CGColor
+        presentViewController(alertController,
+            animated: true,
+            completion: nil)
     }
     
     
