@@ -13,8 +13,7 @@ import Foundation
 
 protocol CalculatorState {
 
-    var displayValue: Int {get}
-    var displayValueAsString: String {get}
+    var displayValue: String {get}
     
     func handleNumberEntryEvent(numberAsString: String) throws -> CalculatorState
     func handleBinaryOperationEvent(operationName: String) throws -> CalculatorState
@@ -33,11 +32,7 @@ enum CalculatorStateError: ErrorType {
 
 // MARK: CalculatorState Default Function Implementations
 extension CalculatorState {
-    
-    var displayValueAsString: String {
-        return String(displayValue)
-    }
-    
+        
     func handleNumberEntryEvent(numberAsString: String) -> CalculatorState {
         return self
     }
