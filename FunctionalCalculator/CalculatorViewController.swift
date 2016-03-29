@@ -46,15 +46,16 @@ class CalculatorViewController: UIViewController {
         
         do {
             let newCalculatorState =
-            try currentCalculatorState.handleNumberEntryEvent(enteredNumber)
+                try currentCalculatorState
+                    .handleNumberEntryEvent(enteredNumber)
             
             currentCalculatorState =  newCalculatorState
         }
-        catch CalculatorStateError.NumberConversionError(
-            let unconvertibleValue) {
+        catch CalculatorStateError
+            .NumberConversionError(let unconvertibleValue) {
                 
-                presentErrorAlert(
-                    "Number button '\(unconvertibleValue)' could not be converted to an integer.")
+            presentErrorAlert(
+                "Number button '\(unconvertibleValue)' could not be converted to an integer.")
                 
         }
         catch {
@@ -70,7 +71,7 @@ class CalculatorViewController: UIViewController {
     
     @IBAction func binaryOperationButtonPressed(sender: UIButton) {
         
-        guard let buttonTitle = sender.titleForState(.Normal) else {
+        guard let operationName = sender.titleForState(.Normal) else {
             NSLog("Button title not set.")
             return
         }
@@ -78,17 +79,21 @@ class CalculatorViewController: UIViewController {
         
         do {
             let newCalculatorState =
-            try currentCalculatorState.handleBinaryOperationEvent(buttonTitle)
+                try currentCalculatorState
+                    .handleBinaryOperationEvent(operationName)
             
             currentCalculatorState =  newCalculatorState
         }
-        catch CalculatorStateError.OperationNotSupported(let operation) {
+        catch CalculatorStateError
+            .OperationNotSupported(let invalidOperation) {
+            
             presentErrorAlert(
-                "Operation '\(operation)' is not supported.")
+                "Operation '\(invalidOperation)' is not supported.")
+        
         }
         catch {
             presentErrorAlert(
-                "Operation '\(buttonTitle)' caused an unexpected exception.")
+                "Operation '\(operationName)' caused an unexpected exception.")
         }
         
         
@@ -98,24 +103,28 @@ class CalculatorViewController: UIViewController {
     
     @IBAction func unaryOperationButtonPressed(sender: UIButton) {
         
-        guard let buttonTitle = sender.titleForState(.Normal) else {
+        guard let operationName = sender.titleForState(.Normal) else {
             NSLog("Button title not set.")
             return
         }
         
         do {
             let newCalculatorState =
-            try currentCalculatorState.handleUnaryOperationEvent(buttonTitle)
+                try currentCalculatorState
+                    .handleUnaryOperationEvent(operationName)
             
             currentCalculatorState =  newCalculatorState
         }
-        catch CalculatorStateError.OperationNotSupported(let operation) {
+        catch CalculatorStateError
+            .OperationNotSupported(let invalidOperation) {
+            
             presentErrorAlert(
-                "Operation '\(operation)' is not supported.")
+                "Operation '\(invalidOperation)' is not supported.")
+        
         }
         catch {
             presentErrorAlert(
-                "Operation '\(buttonTitle)' caused an unexpected exception.")
+                "Operation '\(operationName)' caused an unexpected exception.")
         }
     }
     
