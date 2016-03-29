@@ -55,20 +55,16 @@ extension CalculatorState {
 }
 
 
+private let binaryOperationsMap: [String: BinaryIntOperation] = ["+": add,"-": subtract,"*": multiply,"/": divide]
+
+private let unaryOperationsMap: [String: UnaryIntOperation] =  ["+/-": plusMinus]
+
+
 // MARK: CalculatorState Utility Functions
 extension CalculatorState {
-
-    var binaryOperationsMap: [String: BinaryIntOperation] {
-        return ["+": add,"-": subtract,"*": multiply,"/": divide]
-    }
-    
-    var unaryOperationsMap: [String: UnaryIntOperation] {
-        return ["+/-": plusMinus]
-    }
-    
     
     func binaryIntOperationFor(operationName: String) throws -> BinaryIntOperation {
-
+        
         guard let binaryOperation = binaryOperationsMap[operationName] else {
             throw CalculatorStateError.OperationNotSupported(unsupportedOperation: operationName)
         }
@@ -77,13 +73,17 @@ extension CalculatorState {
     }
     
 
+    
     func unaryIntOperationFor(operationName: String) throws -> UnaryIntOperation {
+
         guard let unaryOperation = unaryOperationsMap[operationName] else {
             throw CalculatorStateError.OperationNotSupported(unsupportedOperation: operationName)
         }
         
         return unaryOperation
     }
+    
+    
     
     func toInt(stringValue: String) throws -> Int {
         
