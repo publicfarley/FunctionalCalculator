@@ -55,9 +55,19 @@ extension CalculatorState {
 }
 
 
-private let binaryOperationsMap: [String: BinaryIntOperation] = ["+": add,"-": subtract,"*": multiply,"/": divide]
+private let binaryOperationsMap:
+    [String: BinaryIntOperation] =
+    
+        ["+": add,
+         "-": subtract,
+         "*": multiply,
+         "/": divide]
 
-private let unaryOperationsMap: [String: UnaryIntOperation] =  ["+/-": plusMinus]
+
+private let unaryOperationsMap:
+    [String: UnaryIntOperation] =
+    
+        ["+/-": plusMinus]
 
 
 // MARK: CalculatorState Utility Functions
