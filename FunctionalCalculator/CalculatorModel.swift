@@ -8,29 +8,33 @@
 
 import Foundation
 
-
-func divide(x: Int, _ y: Int) -> Int {
-    return x/y
-}
-
-func add(x: Int, _ y: Int) -> Int {
-    return x + y
-}
-
-func subtract(x: Int, _ y: Int) -> Int {
-    return x - y
-}
-
-func multiply(x: Int, _ y: Int) -> Int {
-    return x*y
+struct NonZeroInt {
+    let number: Int
+    
+    init?(number: Int) {
+        guard number != 0 else { return nil }
+        
+        self.number = number
+    }
 }
 
 
-func plusMinus(x: Int) -> Int {
+func divide(_ x: Int, _ y: NonZeroInt) -> Int {
+    return x/y.number
+}
+
+func plusMinus(_ x: Int) -> Int {
     return -x
 }
 
-typealias BinaryIntOperation = (Int,Int) -> Int
-typealias UnaryIntOperation = Int -> Int
+// add, subtract and multiply provided natively by +, -, and * respectively.
+
+
+
+
+
+
+
+
 
 
