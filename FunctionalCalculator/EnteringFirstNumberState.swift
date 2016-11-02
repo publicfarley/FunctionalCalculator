@@ -11,11 +11,9 @@ import Foundation
 struct EnteringFirstNumberState: CalculatorState {
     let displayValue: String
 
-    func handleNumberEntryEvent(numberAsString: String) throws -> CalculatorState {
+    func handleNumberEntryEvent(_ numberAsString: String) -> CalculatorState {
     
-        let enteredNumber = try toInt(numberAsString)
-
-        guard !(displayValue == "0" && enteredNumber == 0) else {
+        guard !(displayValue == "0" && numberAsString == "0") else {
             return self
         }
         
@@ -25,29 +23,30 @@ struct EnteringFirstNumberState: CalculatorState {
     }
     
     
-    func handleBinaryOperationEvent(operationName: String) throws -> CalculatorState {
+    func handleBinaryOperationEvent(_ operationName: String) throws -> CalculatorState {
         
         let binaryOperation = try binaryIntOperationFor(operationName)
-
-        let firstNumber = try toInt(displayValue)
         
         return ReadyToEnterSecondNumberState(
-            firstNumber: firstNumber,
+            firstNumber: displayValue,
             binaryIntOperation: binaryOperation,
             displayValue: displayValue)
  
     }
     
     
-    func handleUnaryOperationEvent(operationName: String) throws -> CalculatorState {
+    func handleUnaryOperationEvent(_ operationName: String) throws -> CalculatorState {
         
         let unaryOperation = try unaryIntOperationFor(operationName)
         
-        let currentValue = try toInt(displayValue)
+        let unaryOperationResult = try unaryOperation(displayValue)
         
-        let unaryOperationResult = String(unaryOperation(currentValue))
         
-        return EnteringFirstNumberState(displayValue: unaryOperationResult)
+//        guard let unaryOperationResult = unaryOperation(displayValue) else {
+//            throw CalculatorStateError.UndefinedResultError(reason: "Could not perform \(operationName) on \(displayValue)")
+//        }
+        
+        return EnteringFirstNumberState(displayValue: String(unaryOperationResult))
     }
     
     

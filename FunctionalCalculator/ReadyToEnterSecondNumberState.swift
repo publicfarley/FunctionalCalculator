@@ -9,29 +9,27 @@
 import Foundation
 
 struct ReadyToEnterSecondNumberState: CalculatorState {
-    let firstNumber: Int
-    let binaryIntOperation: BinaryIntOperation
+    let firstNumber: String
+    let binaryIntOperation: BinaryStringToIntOperation
     let displayValue: String
     
     
     
-    func handleNumberEntryEvent(numberAsString: String) throws -> CalculatorState {
+    func handleNumberEntryEvent(_ numberAsString: String) -> CalculatorState {
         
-        let secondNumber = try toInt(numberAsString)
-        
-        guard !(displayValue == "0" && secondNumber == 0) else {
+        guard !(displayValue == "0" && numberAsString == "0") else {
             return self
         }
         
         return EnteringSecondNumberState(
             firstNumber: firstNumber,
-            secondNumber: secondNumber,
+            secondNumber: numberAsString,
             binaryIntOperation: binaryIntOperation,
             displayValue: numberAsString)
     }
     
     
-    func handleBinaryOperationEvent(operationName: String) throws -> CalculatorState {
+    func handleBinaryOperationEvent(_ operationName: String) throws -> CalculatorState {
         
         let operation = try binaryIntOperationFor(operationName)
         
@@ -42,14 +40,18 @@ struct ReadyToEnterSecondNumberState: CalculatorState {
     }
     
     
-    func handleUnaryOperationEvent(operationName: String) throws -> CalculatorState {
+    func handleUnaryOperationEvent(_ operationName: String) throws -> CalculatorState {
         
         let unaryOperation = try unaryIntOperationFor(operationName)
         
-        let unaryOperationResult = unaryOperation(firstNumber)
+        let unaryOperationResult = try unaryOperation(firstNumber)
+        
+//        guard let unaryOperationResult = unaryOperation(firstNumber) else {
+//            throw CalculatorStateError.UndefinedResultError(reason: "Could not perform \(operationName) on \(firstNumber)")
+//        }
         
         return ReadyToEnterSecondNumberState(
-            firstNumber: unaryOperationResult,
+            firstNumber: String(unaryOperationResult),
             binaryIntOperation: binaryIntOperation,
             displayValue:  String(unaryOperationResult))
         
