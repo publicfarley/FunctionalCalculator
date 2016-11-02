@@ -9,7 +9,7 @@
 import Foundation
 
 
-enum OperationError: ErrorProtocol {
+enum OperationError: Error {
     case invalidInputError(invalidInput: String)
 }
 
@@ -37,9 +37,9 @@ enum OperationError: ErrorProtocol {
  *
  */
 func binaryOperationHandler<InputParameter1,InputParameter2,Output>(
-    _ binaryOperation: (InputParameter1,InputParameter2) -> Output,
-    parameter1Convertor: (String) -> InputParameter1?,
-    parameter2Convertor: (String) -> InputParameter2?)
+    _ binaryOperation: @escaping (InputParameter1,InputParameter2) -> Output,
+    parameter1Convertor: @escaping (String) -> InputParameter1?,
+    parameter2Convertor: @escaping (String) -> InputParameter2?)
     
     -> ((String,String) throws -> Output) {
         
@@ -88,8 +88,8 @@ func binaryOperationHandler<InputParameter1,InputParameter2,Output>(
  *
  */
 func unaryOperationHandler<InputParameter,Output>(
-    _ unaryOperation: (InputParameter) -> Output,
-    parameterConvertor: (String) -> InputParameter?)
+    _ unaryOperation: @escaping (InputParameter) -> Output,
+    parameterConvertor: @escaping (String) -> InputParameter?)
     
     -> ((String) throws -> Output) {
         
