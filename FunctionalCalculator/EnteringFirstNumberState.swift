@@ -41,11 +41,6 @@ struct EnteringFirstNumberState: CalculatorState {
         
         let unaryOperationResult = try unaryOperation(displayValue)
         
-        
-//        guard let unaryOperationResult = unaryOperation(displayValue) else {
-//            throw CalculatorStateError.UndefinedResultError(reason: "Could not perform \(operationName) on \(displayValue)")
-//        }
-        
         return EnteringFirstNumberState(displayValue: String(unaryOperationResult))
     }
     

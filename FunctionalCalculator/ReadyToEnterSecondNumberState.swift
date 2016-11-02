@@ -46,10 +46,6 @@ struct ReadyToEnterSecondNumberState: CalculatorState {
         
         let unaryOperationResult = try unaryOperation(firstNumber)
         
-//        guard let unaryOperationResult = unaryOperation(firstNumber) else {
-//            throw CalculatorStateError.UndefinedResultError(reason: "Could not perform \(operationName) on \(firstNumber)")
-//        }
-        
         return ReadyToEnterSecondNumberState(
             firstNumber: String(unaryOperationResult),
             binaryIntOperation: binaryIntOperation,

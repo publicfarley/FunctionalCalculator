@@ -35,11 +35,6 @@ struct EnteringSecondNumberState: CalculatorState {
         let newBinaryOperation = try binaryIntOperationFor(operationName)
         
         let evaluation = try binaryIntOperation(firstNumber,secondNumber)
-
-//        guard let evaluation = binaryIntOperation(firstNumber,secondNumber) else {
-//            throw CalculatorStateError.UndefinedResultError(reason: "Could not perform \(binaryIntOperation) on \(firstNumber),\(secondNumber)")
-//        }
-        
         
         return ReadyToEnterSecondNumberState(
             firstNumber: String(evaluation),
@@ -53,10 +48,6 @@ struct EnteringSecondNumberState: CalculatorState {
         
         let unaryOperationResult = try unaryOperation(secondNumber)
         
-//        guard let unaryOperationResult = unaryOperation(secondNumber) else {
-//            throw CalculatorStateError.UndefinedResultError(reason: "Could not perform \(operationName) on \(secondNumber)")
-//        }
-        
         return EnteringSecondNumberState(
             firstNumber: firstNumber,
             secondNumber: String(unaryOperationResult),
@@ -69,11 +60,7 @@ struct EnteringSecondNumberState: CalculatorState {
     
     func handleEvaluateEvent() throws -> CalculatorState {
 
-        let evaluation = try binaryIntOperation(firstNumber,secondNumber)
-//        guard let evaluation = binaryIntOperation(firstNumber,secondNumber) else {
-//            throw CalculatorStateError.UndefinedResultError(reason: "Could not perform \(binaryIntOperation) on \(firstNumber),\(secondNumber)")
-//        }
-        
+        let evaluation = try binaryIntOperation(firstNumber,secondNumber)        
         return ReadyToEnterFirstNumberState(
             displayValue: String(evaluation))
     }
